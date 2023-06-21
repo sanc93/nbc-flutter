@@ -73,6 +73,64 @@ class HomePage extends StatelessWidget {
             )
           ],
         ),
-        body: Column());
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
+              child: TextField(
+                  decoration: InputDecoration(
+                      suffixIcon: Icon(Icons.search),
+                      hintText: "영화 제목을 검색해주세요",
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 20))),
+            ),
+            Divider(
+              height: 20,
+              color: Colors.transparent,
+            ),
+            Expanded(
+                child: ListView.builder(
+                    itemCount: dataList.length,
+                    itemBuilder: (context, index) {
+                      String category = dataList[index]['category'];
+                      String imgUrl = dataList[index]['imgUrl'];
+
+                      return Card(
+                        color: Colors.white10,
+                        elevation: 90.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Container(
+                                width: 360,
+                                height: 220,
+                                child: ClipRRect(
+                                  child: Image.network(
+                                    imgUrl,
+                                    width: 200,
+                                    height: 200,
+                                    fit: BoxFit.fitWidth,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              style: TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                              category,
+                            ),
+                          ],
+                        ),
+                      );
+                    }))
+          ],
+        ));
   }
 }
