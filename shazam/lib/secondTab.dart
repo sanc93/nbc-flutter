@@ -19,7 +19,7 @@ class SecondTab extends StatelessWidget {
           children: [
             Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                  const EdgeInsets.symmetric(vertical: 3.0, horizontal: 20.0),
               child: Row(
                 children: [
                   GestureDetector(
