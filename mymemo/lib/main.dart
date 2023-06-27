@@ -61,9 +61,11 @@ class _HomePageState extends State<HomePage> {
                     return ListTile(
                       // 메모 고정 아이콘
                       leading: IconButton(
-                        icon: Icon(CupertinoIcons.pin),
+                        icon: Icon(memo.isPinned
+                            ? CupertinoIcons.pin_fill
+                            : CupertinoIcons.pin),
                         onPressed: () {
-                          print('$memo : pin 클릭 됨');
+                          memoService.updatePinMemo(index: index);
                         },
                       ),
                       // 메모 내용 (최대 3줄까지만 보여주도록)
@@ -72,10 +74,10 @@ class _HomePageState extends State<HomePage> {
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      onTap: () {
+                      onTap: () async {
                         // 아이템 클릭시
 
-                        Navigator.push(
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => DetailPage(
@@ -83,17 +85,18 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         );
+                        // 해당 메모가 비어있으면 삭제하는 로직**
                       },
                     );
                   },
                 ),
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
-            onPressed: () {
+            onPressed: () async {
               // + 버튼 클릭시 메모 생성 및 수정 페이지로 이동
 
               memoService.createMemo(content: '');
-              Navigator.push(
+              await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (_) => DetailPage(
@@ -101,6 +104,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               );
+
+              // 비어있으면 삭제
             },
           ),
         );
