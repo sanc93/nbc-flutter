@@ -74,6 +74,9 @@ class _HomePageState extends State<HomePage> {
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      trailing: Text(memo.updatedAt == null
+                          ? ''
+                          : memo.updatedAt.toString().substring(0, 16)),
                       onTap: () async {
                         // 아이템 클릭시
 

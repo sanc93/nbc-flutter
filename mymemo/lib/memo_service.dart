@@ -9,23 +9,28 @@ class Memo {
   Memo({
     required this.content,
     this.isPinned = false,
+    this.updatedAt,
   });
 
   String content;
   bool isPinned;
+  DateTime? updatedAt; // null값이여도 ok
 
   Map toJson() {
     return {
       'content': content,
       'isPinned': isPinned,
+      'updatedAt': updatedAt?.toIso8601String(),
     };
   }
 
   factory Memo.fromJson(json) {
     return Memo(
-        content: json['content'],
-        isPinned: json['isPinned'] ?? false // null값일때 초기값 false,
-        );
+      content: json['content'],
+      isPinned: json['isPinned'] ?? false, // null값일때 초기값 false,
+      updatedAt:
+          json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt']),
+    );
   }
 }
 
@@ -41,7 +46,7 @@ class MemoService extends ChangeNotifier {
   ];
 
   createMemo({required String content}) {
-    Memo memo = Memo(content: content);
+    Memo memo = Memo(content: content, updatedAt: DateTime.now());
     memoList.add(memo);
     notifyListeners(); // Consumer<MemoService>의 builder 부분을 호출해서 화면 새로고침
     saveMemoList();
@@ -50,6 +55,7 @@ class MemoService extends ChangeNotifier {
   updateMemo({required int index, required String content}) {
     Memo memo = memoList[index];
     memo.content = content;
+    memo.updatedAt = DateTime.now();
     notifyListeners();
     saveMemoList();
   }
