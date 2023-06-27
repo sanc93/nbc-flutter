@@ -88,7 +88,11 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         );
+                        //print('나왔다');
                         // 해당 메모가 비어있으면 삭제하는 로직**
+                        if (memo.content.isEmpty) {
+                          memoService.deleteMemo(index: index);
+                        }
                       },
                     );
                   },
@@ -103,12 +107,15 @@ class _HomePageState extends State<HomePage> {
                 context,
                 MaterialPageRoute(
                   builder: (_) => DetailPage(
-                    index: memoService.memoList.length - 1,
+                    index: memoList.length - 1,
                   ),
                 ),
               );
 
               // 비어있으면 삭제
+              if (memoList.last.content.isEmpty) {
+                memoService.deleteMemo(index: memoList.length - 1);
+              }
             },
           ),
         );
