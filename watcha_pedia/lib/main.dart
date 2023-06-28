@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'book.dart';
 import 'book_service.dart';
@@ -188,6 +189,23 @@ class LikedBookPage extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class WebViewPage extends StatelessWidget {
+  WebViewPage({super.key, required this.url});
+
+  String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.grey,
+        title: Text(url),
+      ),
+      body: WebView(initialUrl: url),
     );
   }
 }
