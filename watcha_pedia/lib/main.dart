@@ -113,25 +113,7 @@ class SearchPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 if (bookService.bookList.isEmpty) return SizedBox();
                 Book book = bookService.bookList.elementAt(index);
-                return ListTile(
-                  onTap: () {},
-                  leading: Image.network(
-                    book.thumbnail,
-                    fit: BoxFit.fitHeight,
-                  ),
-                  title: Text(
-                    book.title,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  subtitle: Text(
-                    book.subtitle,
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  trailing: IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.star_border),
-                  ),
-                );
+                return BookTile(book: book);
               },
             ),
           ),
@@ -141,15 +123,71 @@ class SearchPage extends StatelessWidget {
   }
 }
 
+class BookTile extends StatelessWidget {
+  const BookTile({
+    super.key,
+    required this.book,
+  });
+
+  final Book book;
+
+  @override
+  Widget build(BuildContext context) {
+    BookService bookService = context.read<BookService>();
+
+    return ListTile(
+      onTap: () {},
+      leading: Image.network(
+        book.thumbnail,
+        fit: BoxFit.fitHeight,
+      ),
+      title: Text(
+        book.title,
+        style: TextStyle(fontSize: 16),
+      ),
+      subtitle: Text(
+        book.subtitle,
+        style: TextStyle(color: Colors.grey),
+      ),
+      trailing: IconButton(
+        onPressed: () {
+          bookService.toggleLikeBook(book: book);
+        },
+        icon: bookService.likedBookList.map((book) => book.id).contains(book.id)
+            ? Icon(
+                Icons.star,
+                color: Colors.amber,
+              )
+            : Icon(Icons.star_border),
+      ),
+    );
+  }
+}
+
 class LikedBookPage extends StatelessWidget {
   const LikedBookPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text("좋아요"),
-      ),
+    return Consumer<BookService>(
+      builder: (context, bookService, child) {
+        return Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: ListView.separated(
+              itemCount: bookService.likedBookList.length,
+              separatorBuilder: (context, index) {
+                return Divider();
+              },
+              itemBuilder: (context, index) {
+                if (bookService.likedBookList.isEmpty) return SizedBox();
+                Book book = bookService.likedBookList.elementAt(index);
+                return BookTile(book: book);
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }
