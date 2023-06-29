@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'book.dart';
 import 'book_service.dart';
 
-void main() {
+late SharedPreferences prefs; // 전역변수 prefs
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // 비동기 처리를 위해
+  prefs = await SharedPreferences.getInstance();
+
   runApp(
     MultiProvider(
       providers: [
