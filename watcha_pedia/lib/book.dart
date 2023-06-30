@@ -16,4 +16,30 @@ class Book {
     required this.authors,
     required this.publishedDate,
   });
+
+  // shared_preferences는 객체를 그대로 저장할수 없기에, 한번 map형태로 바꾼 뒤, String으로 변경　후 저장
+  Map toJson() {
+    return {
+      "id": id,
+      "title": title,
+      "subtitle": subtitle,
+      "thumbnail": thumbnail,
+      "previewLink": previewLink,
+      "authors": authors,
+      "publishedDate": publishedDate,
+    };
+  }
+
+// 가져올때는 반대로
+  factory Book.fromJson(json) {
+    return Book(
+      id: json['id'],
+      title: json['title'],
+      subtitle: json['subtitle'],
+      thumbnail: json['thumbnail'],
+      previewLink: json['previewLink'],
+      authors: json['authors'],
+      publishedDate: json['publishedDate'],
+    );
+  }
 }

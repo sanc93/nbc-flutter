@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'book.dart';
+import 'main.dart';
 
 class BookService extends ChangeNotifier {
+  // 처음 앱 시작할떄 : 생성자(클래스 이름과 같은 함수) 함수에 넣기
+  BookService() {
+    loadLikedBookList();
+  }
   List<Book> bookList = []; // 책 목록
   List<Book> likedBookList = []; // 좋아요 목록
 
@@ -15,6 +22,7 @@ class BookService extends ChangeNotifier {
       likedBookList.add(book);
     }
     notifyListeners();
+    saveLikedBookList();
   }
 
   void search(String q) async {
@@ -42,5 +50,26 @@ class BookService extends ChangeNotifier {
       //print(bookList);
       notifyListeners();
     }
+  }
+
+  saveLikedBookList() {
+    List likedBookJsonList =
+        likedBookList.map((book) => book.toJson()).toList();
+
+    // JSON 인코드
+    String jsonString = jsonEncode(likedBookJsonList);
+
+    prefs.setString('likedBookList', jsonString);
+  }
+
+  loadLikedBookList() {
+    String? jsonString = prefs.getString('likedBookList');
+
+    if (jsonString == null) return;
+    // JSON 디코드
+    List likedBookJsonList = jsonDecode(jsonString);
+
+    likedBookList =
+        likedBookJsonList.map((json) => Book.fromJson(json)).toList();
   }
 }
